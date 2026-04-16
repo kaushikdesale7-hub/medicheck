@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCheck — Smart Health Assistant</title>
+<meta name="description" content="A step-by-step smart health assistant to assess symptoms, get AI-based test recommendations, find nearby hospitals, and track your health history."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lora:wght@500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-inner">
+        <span class="logo-icon">🩺</span>
+        <div>
+          <div class="logo-text">MediCheck</div>
+          <span class="logo-sub">Smart Health Assistant</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-steps" id="sidebar-steps">
+      <div class="sidebar-step" id="ss-0">
+        <div class="ss-num">1</div>
+        <div class="ss-info">
+          <div class="ss-title">Authentication</div>
+          <div class="ss-label">Sign in / Sign up</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-1">
+        <div class="ss-num">2</div>
+        <div class="ss-info">
+          <div class="ss-title">Your Profile</div>
+          <div class="ss-label">Personal info</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-2">
+        <div class="ss-num">3</div>
+        <div class="ss-info">
+          <div class="ss-title">Symptoms</div>
+          <div class="ss-label">What you're feeling</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-3">
+        <div class="ss-num">4</div>
+        <div class="ss-info">
+          <div class="ss-title">Description</div>
+          <div class="ss-label">Detailed info</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-4">
+        <div class="ss-num">5</div>
+        <div class="ss-info">
+          <div class="ss-title">Test Results</div>
+          <div class="ss-label">AI recommendations</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-5">
+        <div class="ss-num">6</div>
+        <div class="ss-info">
+          <div class="ss-title">Hospitals</div>
+          <div class="ss-label">Find nearby care</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-6">
+        <div class="ss-num">7</div>
+        <div class="ss-info">
+          <div class="ss-title">Feedback</div>
+          <div class="ss-label">Rate your experience</div>
+        </div>
+      </div>
+      <div class="sidebar-step" id="ss-7">
+        <div class="ss-num">8</div>
+        <div class="ss-info">
+          <div class="ss-title">Report & History</div>
+          <div class="ss-label">Download & review</div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-progress-bar">
+        <div class="sidebar-progress-fill" id="sidebar-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="sidebar-progress-text">
+        <span id="sidebar-progress-label">Step 1 of 8</span>
+        <span class="sidebar-progress-pct" id="sidebar-progress-pct">0%</span>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content" id="main-content">
+
+    <!-- ══════════════════════════════════════
+         PAGE 1: LOGIN / SIGNUP — Split layout
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-login">
+      <div class="split-layout">
+        <!-- Left hero panel -->
+        <div class="split-left">
+          <div class="hero-badge">🩺 MediCheck v5.0</div>
+          <h1 class="hero-title">Your Smart<br><span>Health</span><br>Assistant</h1>
+          <p class="hero-sub">Step-by-step symptom assessment, AI-powered test recommendations, and nearby hospital finder — all in one place.</p>
+          <div class="hero-features">
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🔒</div>
+              <div>
+                <div class="hero-feature-text">Secure & Private</div>
+                <div class="hero-feature-sub">Your data stays on your device</div>
+              </div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🧬</div>
+              <div>
+                <div class="hero-feature-text">AI-Powered Analysis</div>
+                <div class="hero-feature-sub">Smart test suggestions based on symptoms</div>
+              </div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">📥</div>
+              <div>
+                <div class="hero-feature-text">PDF Health Reports</div>
+                <div class="hero-feature-sub">Download a detailed report anytime</div>
+              </div>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🏥</div>
+              <div>
+                <div class="hero-feature-text">Hospital Finder</div>
+                <div class="hero-feature-sub">Top hospitals across 12 Indian cities</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right form panel -->
+        <div class="split-right">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 1 — Authentication</div>
+          <div class="page-title" id="login-heading">Welcome back 👋</div>
+          <p class="page-sub" style="margin-bottom:28px;">Sign in to your account or create a new one to get started.</p>
+
+          <label>Email Address</label>
+          <div class="field-group">
+            <span class="field-icon">📧</span>
+            <input type="email" id="login-email" placeholder="e.g. john@example.com" class="has-icon" oninput="checkEmail()"/>
+          </div>
+          <div id="login-email-err" class="error hidden"></div>
+
+          <div id="password-section">
+            <label>Password</label>
+            <div class="field-group">
+              <span class="field-icon">🔑</span>
+              <input type="password" id="login-pass" placeholder="Min. 6 characters" class="has-icon"/>
+            </div>
+            <div id="confirm-section" class="hidden">
+              <label>Confirm Password</label>
+              <div class="field-group">
+                <span class="field-icon">🔐</span>
+                <input type="password" id="login-pass2" placeholder="Re-enter your password" class="has-icon"/>
+              </div>
+            </div>
+          </div>
+
+          <div id="otp-section" class="hidden">
+            <label>Email OTP Verification</label>
+            <div class="input-row">
+              <div class="field">
+                <div class="field-group">
+                  <span class="field-icon">🔢</span>
+                  <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6" class="has-icon"/>
+                </div>
+              </div>
+              <button class="btn-otp" onclick="sendOTP()" id="send-otp-btn">Send OTP</button>
+            </div>
+            <div id="otp-msg" class="otp-info hidden"></div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" onclick="handleLogin()" id="auth-submit-btn">
+              <span>Sign In</span><span>→</span>
+            </button>
+          </div>
+          <button class="btn btn-secondary btn-full" onclick="toggleNewUser()" id="toggle-user-btn" style="margin-top:12px;">New here? Create account</button>
+          <p id="login-status" class="error hidden" style="margin-top:12px;display:flex;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 2: PERSONAL INFO
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-info">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 2 — Profile</div>
+          <h2 class="page-title">Tell us about you 🙋</h2>
+          <p class="page-sub">This helps us personalise your health recommendations and reports.</p>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-box-num">🧬</div><div class="stat-box-label">Personalised AI</div></div>
+          <div class="stat-box"><div class="stat-box-num">📊</div><div class="stat-box-label">Track History</div></div>
+          <div class="stat-box"><div class="stat-box-num">🔐</div><div class="stat-box-label">Secure Data</div></div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label>Full Name</label>
+            <div class="field-group">
+              <span class="field-icon">👤</span>
+              <input type="text" id="p-name" placeholder="Name" class="has-icon"/>
+            </div>
+          </div>
+          <div>
+            <label>Age</label>
+            <div class="field-group">
+              <span class="field-icon">🎂</span>
+              <input type="number" id="p-age" placeholder="Age" min="1" max="120" class="has-icon"/>
+            </div>
+          </div>
+          <div>
+            <label>Gender</label>
+            <select id="p-gender">
+              <option value="">Select gender</option>
+              <option>Male</option><option>Female</option><option>Non-binary</option><option>Prefer not to say</option>
+            </select>
+          </div>
+          <div>
+            <label>Phone Number</label>
+            <div class="field-group">
+              <span class="field-icon">📱</span>
+              <input type="tel" id="p-phone" placeholder="Phone Number" class="has-icon"/>
+            </div>
+          </div>
+          <div>
+            <label>City / Location</label>
+            <div class="field-group">
+              <span class="field-icon">📍</span>
+              <input type="text" id="p-city" placeholder="City" class="has-icon"/>
+            </div>
+          </div>
+          <div>
+            <label>Email (pre-filled)</label>
+            <div class="field-group">
+              <span class="field-icon">📧</span>
+              <input type="email" id="p-email" placeholder="Email" readonly class="has-icon" style="opacity:0.6"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="saveInfo()"><span>Save & Continue</span><span>→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 3: SYMPTOM CHECKER
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-quest">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-quest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 3 — Symptoms</div>
+          <h2 class="page-title">How are you feeling? 🩺</h2>
+          <p class="page-sub">Select all symptoms that apply — the more you share, the better your recommendations.</p>
+        </div>
+
+        <div class="symptom-grid" id="symptom-list"></div>
+
+        <label style="margin-top:28px">Stress Level
+          <span style="font-size:10px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0"> — helps us include mental health in your assessment</span>
+        </label>
+        <div style="display:flex;align-items:center;gap:18px;margin-top:8px">
+          <input type="range" id="stress" min="1" max="10" value="3" style="flex:1" oninput="updateStress(this.value)"/>
+          <div style="text-align:center;min-width:56px">
+            <span id="stress-val" style="font-size:26px;font-weight:900;color:var(--primary)">3</span>
+            <div style="font-size:10px;color:var(--text3);font-weight:700" id="stress-label">Low</div>
+          </div>
+        </div>
+
+        <label style="margin-top:24px">Custom Symptom (optional)</label>
+        <div class="field-group">
+          <span class="field-icon">✏️</span>
+          <input type="text" id="other-symptoms" placeholder="Other Symptoms" class="has-icon"/>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="saveSymptoms()"><span>Next Step</span><span>→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 4: DETAILED DESCRIPTION
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-desc">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-desc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 4 — Details</div>
+          <h2 class="page-title">Describe your issue 💬</h2>
+          <p class="page-sub">The more detail you provide, the better your AI-based test recommendations will be.</p>
+        </div>
+
+        <div class="tip-box">
+          💡 <strong>Tip:</strong> Include when symptoms started, what makes them worse or better, and any medications you're taking.
+        </div>
+
+        <label>Symptom Description</label>
+        <textarea id="desc-text" placeholder="Describe your symptoms in detail…" style="min-height:180px"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div id="desc-char-bar" style="flex:1;height:4px;background:var(--bg2);border-radius:4px;margin-right:12px;overflow:hidden">
+            <div id="desc-char-fill" style="height:100%;background:var(--grad);width:0%;transition:width 0.2s;border-radius:4px"></div>
+          </div>
+          <div id="desc-char" style="font-size:12px;color:var(--text3);font-weight:700;white-space:nowrap">0 / 500</div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="saveDesc()"><span>Analyse & Suggest Tests</span><span>→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 5: AI TEST SUGGESTIONS + CURE GUIDANCE
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-tests">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-tests">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 5 — Tests & Guidance</div>
+          <h2 class="page-title">Recommended Tests 🔬</h2>
+          <p class="page-sub">AI-based diagnostic suggestions matched to your symptom profile.</p>
+        </div>
+
+        <div id="test-grid-container" class="test-grid"></div>
+
+        <div class="info-note" style="margin-top:24px">
+          <span class="info-note-icon">⚠️</span>
+          <span>Always consult a registered physician before getting any tests done. These are AI-assisted suggestions only and do not constitute medical advice.</span>
+        </div>
+
+        <div class="cure-section" id="cure-section">
+          <div class="section-title">🌿 Basic Guidance & Precautions</div>
+          <div id="cure-grid-container" class="cure-grid"></div>
+          <div class="disclaimer-note" style="margin-top:16px">
+            <span style="flex-shrink:0">ℹ️</span>
+            <span>This guidance is for general informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment.</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="goTo('page-hospitals')"><span>Find Nearby Hospitals</span><span>→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 6: HOSPITAL FINDER
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-hospitals">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-hospitals">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 6 — Hospitals</div>
+          <h2 class="page-title">Top Hospitals 🏥</h2>
+          <p class="page-sub">Sorted by your preference — real hospital data across major Indian cities.</p>
+        </div>
+
+        <div id="nearest-banner" class="nearest-badge hidden">
+          📍 Showing hospitals nearest to your location
+        </div>
+
+        <label style="margin-top:0">Filter by City</label>
+        <div class="city-tabs" id="city-tabs"></div>
+
+        <div class="sort-bar">
+          <button class="sort-btn active" onclick="sortHospitals('rating',this)"><span>⭐ Rating</span></button>
+          <button class="sort-btn" onclick="sortHospitals('cost',this)"><span>💰 Cost</span></button>
+          <button class="sort-btn" onclick="sortHospitals('reviews',this)"><span>💬 Reviews</span></button>
+        </div>
+
+        <div class="hospital-list" id="hospital-list"></div>
+
+        <div class="action-row" style="margin-top:32px">
+          <button class="btn btn-primary" onclick="goTo('page-review')"><span>Continue to Feedback</span><span>→</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 7: FEEDBACK & RATING
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-review">
+      <div class="page-scroll">
+        <button class="back-btn" onclick="goBack()" id="back-review">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+
+        <div class="page-header">
+          <div class="page-eyebrow"><span class="eyebrow-dot"></span>Step 7 — Feedback</div>
+          <h2 class="page-title">How was your experience? ✨</h2>
+          <p class="page-sub">Your feedback helps us improve MediCheck for everyone.</p>
+        </div>
+
+        <label>Rate your experience</label>
+        <div class="star-row" id="star-row">
+          <button class="star-btn" onclick="rate(1)" data-v="1">☆</button>
+          <button class="star-btn" onclick="rate(2)" data-v="2">☆</button>
+          <button class="star-btn" onclick="rate(3)" data-v="3">☆</button>
+          <button class="star-btn" onclick="rate(4)" data-v="4">☆</button>
+          <button class="star-btn" onclick="rate(5)" data-v="5">☆</button>
+        </div>
+        <div id="rating-label" style="font-size:13px;color:var(--text3);margin-top:10px;min-height:20px;font-weight:700"></div>
+
+        <label style="margin-top:28px">Tell us more (optional)</label>
+        <textarea id="feedback-text" placeholder="Share your thoughts about MediCheck…" style="min-height:130px"></textarea>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="submitReview()"><span>Submit & Finish</span><span>🎉</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE 8: FINAL REPORT + HISTORY
+    ══════════════════════════════════════ -->
+    <div class="page hidden" id="page-done">
+      <div class="page-scroll">
+        <div class="done-hero">
+          <span class="done-emoji">🎉</span>
+          <h2 class="page-title" style="text-align:center">You're all set!</h2>
+          <p class="page-sub" style="text-align:center;margin:0 auto;max-width:480px">
+            Your health report has been saved to your history. Download your PDF report, revisit past reports, or start a new check.
+          </p>
+          <div class="done-actions">
+            <button class="btn btn-primary btn-sm" onclick="downloadReport()">📥 Download PDF Report</button>
+            <button class="btn btn-secondary btn-sm" onclick="restart()" style="margin-top:0">↩ Start New Check</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">📋 Your Health History</div>
+        <div class="history-section" id="history-section">
+          <div class="history-empty" id="history-empty">
+            <div class="history-empty-icon">📂</div>
+            No history yet — complete your first check to see records here
+          </div>
+          <div class="history-timeline" id="history-timeline" style="display:none"></div>
+        </div>
+
+        <div class="divider"></div>
+        <div style="text-align:center">
+          <button class="btn-danger" onclick="clearHistory()">🗑 Clear History</button>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- /main-content -->
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     APPOINTMENT BOOKING MODAL
+══════════════════════════════════════ -->
+<div id="appt-overlay" style="
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(4,12,24,0.72);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:20px;
+">
+  <div id="appt-modal" style="
+    background:var(--glass);backdrop-filter:blur(34px) saturate(1.6);
+    -webkit-backdrop-filter:blur(34px) saturate(1.6);
+    border:1.5px solid var(--glass-border);
+    border-radius:24px;box-shadow:0 30px 90px rgba(0,20,60,0.28);
+    width:100%;max-width:520px;max-height:92vh;overflow-y:auto;
+    padding:36px 32px;position:relative;
+    animation:modalPop 0.42s cubic-bezier(0.34,1.56,0.64,1) both;
+  ">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;border-radius:24px 24px 0 0;
+      background:linear-gradient(90deg,transparent,rgba(0,158,207,0.9),rgba(0,88,192,1),transparent);"></div>
+
+    <button onclick="closeAppointment()" style="
+      position:absolute;top:16px;right:16px;
+      background:var(--surface2);border:1.5px solid var(--primary-border);
+      border-radius:50%;width:36px;height:36px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;color:var(--text2);transition:all 0.22s;
+      font-family:sans-serif;line-height:1;
+    " onmouseover="this.style.background='var(--danger)';this.style.color='#fff';this.style.borderColor='var(--danger)';"
+       onmouseout="this.style.background='var(--surface2)';this.style.color='var(--text2)';this.style.borderColor='var(--primary-border)';"
+    >✕</button>
+
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+      <div style="
+        width:52px;height:52px;border-radius:16px;
+        background:linear-gradient(135deg,#0058c0,#007a65);
+        display:flex;align-items:center;justify-content:center;
+        font-size:24px;flex-shrink:0;
+        box-shadow:0 6px 20px rgba(0,88,192,0.36);
+      ">📅</div>
+      <div>
+        <div style="font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--text);line-height:1.2">Book Appointment</div>
+        <div id="appt-hospital-name" style="font-size:12px;color:var(--primary);font-weight:700;margin-top:3px"></div>
+      </div>
+    </div>
+
+    <div id="appt-form-wrap">
+      <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.09em">Patient Name</label>
+      <div style="position:relative">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">👤</span>
+        <input id="appt-name" type="text" placeholder="Full name" style="padding-left:42px" />
+      </div>
+
+      <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;margin-top:18px;text-transform:uppercase;letter-spacing:0.09em">Department / Speciality</label>
+      <select id="appt-dept">
+        <option value="">Select department…</option>
+        <option>General Medicine</option><option>Cardiology</option><option>Orthopedics</option>
+        <option>Neurology</option><option>Dermatology</option><option>Gynecology</option>
+        <option>Pediatrics</option><option>ENT</option><option>Ophthalmology</option>
+        <option>Gastroenterology</option><option>Pulmonology</option><option>Oncology</option>
+        <option>Urology</option><option>Psychiatry</option><option>Endocrinology</option>
+        <option>Nephrology</option><option>Rheumatology</option><option>Emergency</option>
+      </select>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
+        <div>
+          <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.09em">Preferred Date</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">📆</span>
+            <input id="appt-date" type="date" style="padding-left:42px" />
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.09em">Preferred Time</label>
+          <div style="position:relative">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">🕐</span>
+            <select id="appt-time" style="padding-left:42px">
+              <option value="">Select time…</option>
+              <option>09:00 AM</option><option>09:30 AM</option><option>10:00 AM</option>
+              <option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
+              <option>12:00 PM</option><option>02:00 PM</option><option>02:30 PM</option>
+              <option>03:00 PM</option><option>03:30 PM</option><option>04:00 PM</option>
+              <option>04:30 PM</option><option>05:00 PM</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;margin-top:18px;text-transform:uppercase;letter-spacing:0.09em">Contact Number</label>
+      <div style="position:relative">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none">📞</span>
+        <input id="appt-phone" type="tel" placeholder="+91 XXXXX XXXXX" style="padding-left:42px" />
+      </div>
+
+      <label style="font-size:11px;font-weight:800;color:var(--text2);display:block;margin-bottom:7px;margin-top:18px;text-transform:uppercase;letter-spacing:0.09em">Additional Notes (optional)</label>
+      <textarea id="appt-notes" placeholder="Any specific concerns, current medications, or previous reports…" style="min-height:80px"></textarea>
+
+      <div id="appt-err" style="display:none;font-size:12px;color:var(--danger);margin-top:8px;align-items:center;gap:6px">⚠️ <span id="appt-err-msg"></span></div>
+
+      <button onclick="bookAppointment()" style="
+        margin-top:22px;width:100%;
+        background:linear-gradient(135deg,#0058c0,#007a65);
+        color:#fff;border:none;border-radius:14px;
+        padding:15px 28px;font-size:14px;font-weight:800;
+        font-family:'Inter',sans-serif;cursor:pointer;
+        box-shadow:0 6px 24px rgba(0,88,192,0.40);
+        transition:all 0.30s cubic-bezier(0.34,1.56,0.64,1);
+        display:flex;align-items:center;justify-content:center;gap:10px;
+      "
+      onmouseover="this.style.transform='translateY(-3px) scale(1.015)';this.style.boxShadow='0 12px 36px rgba(0,88,192,0.52)';"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(0,88,192,0.40)';"
+      >📅 <span>Confirm Appointment</span></button>
+    </div>
+
+    <div id="appt-success" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:64px;margin-bottom:16px;animation:celebBounce 0.9s cubic-bezier(0.34,1.56,0.64,1) both">✅</div>
+      <div style="font-family:'Lora',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:10px">Appointment Requested!</div>
+      <div id="appt-confirm-text" style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px"></div>
+      <div style="
+        background:var(--primary-soft);border:1px solid var(--primary-border);
+        border-radius:14px;padding:16px 18px;text-align:left;margin-bottom:20px;
+        font-size:12px;color:var(--text2);
+      ">
+        <div style="font-weight:800;color:var(--primary);margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em">📋 Appointment Summary</div>
+        <div id="appt-summary-box"></div>
+      </div>
+      <button onclick="closeAppointment()" style="
+        background:linear-gradient(135deg,#0058c0,#007a65);color:#fff;
+        border:none;border-radius:50px;padding:12px 32px;
+        font-size:14px;font-weight:800;cursor:pointer;
+        font-family:'Inter',sans-serif;
+        box-shadow:0 6px 20px rgba(0,88,192,0.36);
+        transition:all 0.28s;
+      ">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// MEDICHECK – SMART HEALTH ASSISTANT v5.0
+// Full-screen layout — all functionality preserved
+// ════════════════════════════════════════════════════════════════
+
+const PAGES=['page-login','page-info','page-quest','page-desc','page-tests','page-hospitals','page-review','page-done'];
+const PAGE_NAMES=['Authentication','Profile','Symptoms','Description','Tests','Hospitals','Review','Done'];
+let currentPage=0,isNew=false,otpSent=false,otpCode='',userRating=0;
+let state={email:'',name:'',age:'',gender:'',phone:'',city:'',symptoms:[],stress:3,other:'',description:'',tests:[],rating:0,feedback:''};
+let currentCity='auto';
+let userLocation=null;
+
+// ─── LOCAL STORAGE ───
+function saveLocal(){localStorage.setItem('hc_state',JSON.stringify(state));localStorage.setItem('hc_page',currentPage)}
+function loadLocal(){
+  try{
+    const s=localStorage.getItem('hc_state');
+    const p=localStorage.getItem('hc_page');
+    if(s){state={...state,...JSON.parse(s)};showToast('💾 Progress restored!')}
+    if(p&&parseInt(p)>0){currentPage=parseInt(p);renderSidebar();showPage(PAGES[currentPage])}
+  }catch(e){}
+}
+
+// ─── HEALTH HISTORY ───
+function getHistory(){try{return JSON.parse(localStorage.getItem('hc_history')||'[]')}catch(e){return[]}}
+function saveHistory(){
+  const hist=getHistory();
+  const entry={
+    id:Date.now(),
+    date:new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+    name:state.name,age:state.age,gender:state.gender,city:state.city,
+    symptoms:[...state.symptoms],
+    tests:[...state.tests],
+    stress:state.stress,
+    rating:state.rating,
+    description:state.description
+  };
+  hist.unshift(entry);
+  if(hist.length>10)hist.length=10;
+  localStorage.setItem('hc_history',JSON.stringify(hist));
+}
+function renderHistory(){
+  const hist=getHistory();
+  const empty=document.getElementById('history-empty');
+  const timeline=document.getElementById('history-timeline');
+  if(!hist.length){empty.style.display='';timeline.style.display='none';return}
+  empty.style.display='none';timeline.style.display='';
+  timeline.innerHTML=hist.map((e,i)=>`
+    <div class="history-item fade-in" style="animation-delay:${i*0.07}s">
+      <div class="history-item-header">
+        <div>
+          <div class="history-item-name">${e.name||'Anonymous'} · ${e.age?e.age+' yrs':''} ${e.gender?'· '+e.gender:''}</div>
+          <div class="history-item-date">📅 ${e.date} ${e.city?'· 📍 '+e.city:''}</div>
+        </div>
+        <div style="text-align:right">
+          ${e.rating?'<div style="color:#f59e0b;font-size:14px">'+'★'.repeat(e.rating)+'</div>':''}
+          <div style="font-size:11px;color:var(--text3)">Stress: ${e.stress}/10</div>
+        </div>
+      </div>
+      ${e.symptoms&&e.symptoms.length?`<div class="history-tags">${e.symptoms.map(s=>`<span class="history-tag">${s}</span>`).join('')}</div>`:''}
+      ${e.tests&&e.tests.length?`<div class="history-tags" style="margin-top:6px">${e.tests.slice(0,4).map(t=>`<span class="history-tag-teal">🔬 ${t}</span>`).join('')}${e.tests.length>4?`<span class="history-tag-teal">+${e.tests.length-4} more</span>`:''}</div>`:''}
+    </div>
+  `).join('');
+}
+function clearHistory(){
+  if(!confirm('Clear all health history? This cannot be undone.'))return;
+  localStorage.removeItem('hc_history');
+  renderHistory();
+  showToast('🗑 History cleared');
+}
+
+// ─── SIDEBAR / PROGRESS ───
+function renderSidebar(){
+  // Update step states
+  document.querySelectorAll('.sidebar-step').forEach((el,i)=>{
+    el.classList.remove('active','done');
+    if(i===currentPage)el.classList.add('active');
+    else if(i<currentPage)el.classList.add('done');
+  });
+  // Update done step number display (show check)
+  document.querySelectorAll('.sidebar-step').forEach((el,i)=>{
+    const numEl=el.querySelector('.ss-num');
+    if(numEl){
+      if(i<currentPage){
+        numEl.innerHTML='✓';
+        numEl.style.fontSize='14px';
+      } else {
+        numEl.textContent=i+1;
+        numEl.style.fontSize='';
+      }
+    }
+  });
+  // Progress bar
+  const pct=Math.round((currentPage/(PAGES.length-1))*100);
+  const fill=document.getElementById('sidebar-progress-fill');
+  if(fill)fill.style.width=pct+'%';
+  const lbl=document.getElementById('sidebar-progress-label');
+  if(lbl)lbl.textContent=`Step ${currentPage+1} of ${PAGES.length}`;
+  const pctEl=document.getElementById('sidebar-progress-pct');
+  if(pctEl)pctEl.textContent=pct+'%';
+}
+
+// ─── PAGE NAV ───
+function showPage(id){
+  PAGES.forEach(p=>document.getElementById(p).classList.add('hidden'));
+  const el=document.getElementById(id);
+  el.classList.remove('hidden');
+  renderSidebar();
+  // Scroll top of page-scroll
+  const sc=el.querySelector('.page-scroll');
+  if(sc)sc.scrollTop=0;
+  saveLocal();
+  if(id==='page-hospitals')initHospitalPage();
+  if(id==='page-done'){saveHistory();renderHistory()}
+}
+function goTo(id){currentPage=PAGES.indexOf(id);showPage(id)}
+function goBack(){
+  if(currentPage>0){currentPage--;showPage(PAGES[currentPage]);}
+}
+
+// ─── TOAST ───
+function showToast(msg,dur=2800){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ─── THEME ───
+function toggleTheme(){
+  document.documentElement.classList.toggle('dark');
+  const btn=document.getElementById('theme-btn');
+  btn.textContent=document.documentElement.classList.contains('dark')?'☀ Light Mode':'🌙 Dark Mode';
+  localStorage.setItem('hc_theme',document.documentElement.classList.contains('dark')?'dark':'light');
+}
+(function(){
+  const t=localStorage.getItem('hc_theme');
+  if(t==='dark'){document.documentElement.classList.add('dark');const b=document.getElementById('theme-btn');if(b)b.textContent='☀ Light Mode';}
+})();
+
+// ─── STEP 1: AUTH ───
+function toggleNewUser(){
+  isNew=!isNew;
+  document.getElementById('confirm-section').classList.toggle('hidden',!isNew);
+  document.getElementById('otp-section').classList.toggle('hidden',!isNew);
+  document.getElementById('toggle-user-btn').textContent=isNew?'Already have an account? Sign in':'New here? Create account';
+  document.getElementById('login-heading').textContent=isNew?'Create account 🚀':'Welcome back 👋';
+  document.getElementById('auth-submit-btn').innerHTML=isNew?'<span>Create Account</span><span>🚀</span>':'<span>Sign In</span><span>→</span>';
+}
+function checkEmail(){
+  const e=document.getElementById('login-email').value;
+  const err=document.getElementById('login-email-err');
+  if(e&&!/^\S+@\S+\.\S+$/.test(e)){err.textContent='⚠ Please enter a valid email';err.classList.remove('hidden')}
+  else{err.classList.add('hidden')}
+}
+function sendOTP(){
+  const e=document.getElementById('login-email').value;
+  if(!/^\S+@\S+\.\S+$/.test(e)){showToast('⚠️ Enter a valid email first');return}
+  otpCode=String(Math.floor(100000+Math.random()*900000));
+  otpSent=true;
+  const msg=document.getElementById('otp-msg');
+  msg.textContent=`✓ OTP sent to ${e} — (Demo OTP: ${otpCode})`;
+  msg.classList.remove('hidden');
+  document.getElementById('send-otp-btn').textContent='Resend';
+  showToast('📧 OTP sent to your email!');
+}
+function handleLogin(){
+  const email=document.getElementById('login-email').value;
+  const pass=document.getElementById('login-pass').value;
+  const status=document.getElementById('login-status');
+  if(!/^\S+@\S+\.\S+$/.test(email)){status.textContent='⚠️ Enter a valid email';status.classList.remove('hidden');return}
+  if(pass.length<6){status.textContent='⚠️ Password must be at least 6 characters';status.classList.remove('hidden');return}
+  if(isNew){
+    const pass2=document.getElementById('login-pass2').value;
+    if(pass!==pass2){status.textContent='⚠️ Passwords do not match';status.classList.remove('hidden');return}
+    if(!otpSent){status.textContent='⚠️ Please send and verify OTP first';status.classList.remove('hidden');return}
+    const entered=document.getElementById('otp-input').value;
+    if(entered!==otpCode){status.textContent='⚠️ Invalid OTP code';status.classList.remove('hidden');return}
+  }
+  state.email=email;
+  document.getElementById('p-email').value=email;
+  status.classList.add('hidden');
+  showToast('✅ Logged in successfully!');
+  currentPage=1;showPage('page-info');
+}
+
+// ─── STEP 2: INFO ───
+function saveInfo(){
+  const name=document.getElementById('p-name').value.trim();
+  const age=document.getElementById('p-age').value;
+  const gender=document.getElementById('p-gender').value;
+  const phone=document.getElementById('p-phone').value.trim();
+  const city=document.getElementById('p-city').value.trim();
+  if(!name||!age||!gender||!phone||!city){showToast('⚠️ Please fill all fields');return}
+  state={...state,name,age,gender,phone,city};
+  saveLocal();showToast('✅ Profile saved!');
+  currentPage=2;showPage('page-quest');buildSymptoms();
+}
+
+// ─── STEP 3: SYMPTOMS ───
+const SYMPTOMS=[
+  {id:'fever',label:'Fever / High Temperature',emoji:'🌡️'},
+  {id:'headache',label:'Headache / Migraine',emoji:'🤕'},
+  {id:'bodypain',label:'Body Aches & Pain',emoji:'💪'},
+  {id:'bp',label:'Blood Pressure Issues',emoji:'🩺'},
+  {id:'diabetes',label:'Diabetes / High Sugar',emoji:'🍬'},
+  {id:'fatigue',label:'Fatigue / Weakness',emoji:'😴'},
+  {id:'sleep',label:'Sleep Disturbances',emoji:'🛌'},
+  {id:'chest',label:'Chest Pain / Tightness',emoji:'💔'},
+  {id:'cough',label:'Cough / Cold',emoji:'😷'},
+  {id:'nausea',label:'Nausea / Vomiting',emoji:'🤢'},
+];
+function buildSymptoms(){
+  const el=document.getElementById('symptom-list');
+  el.innerHTML=SYMPTOMS.map(s=>`
+    <div class="check-row" id="checkrow-${s.id}" onclick="toggleSymptom('${s.id}',this)">
+      <span class="emoji">${s.emoji}</span>
+      <span>${s.label}</span>
+      <input type="checkbox" id="sym-${s.id}" style="pointer-events:none"/>
+    </div>`).join('');
+}
+function toggleSymptom(id,row){
+  const cb=document.getElementById('sym-'+id);
+  cb.checked=!cb.checked;
+  row.classList.toggle('selected',cb.checked);
+}
+
+function updateStress(val){
+  document.getElementById('stress-val').textContent=val;
+  const labels=['','Very Low','Low','Mild','Moderate','Moderate','High','High','Very High','Extreme','Critical'];
+  document.getElementById('stress-label').textContent=labels[parseInt(val)]||'';
+  const pct=((val-1)/9)*100;
+  document.getElementById('stress').style.setProperty('--pct',pct+'%');
+}
+
+function saveSymptoms(){
+  state.symptoms=SYMPTOMS.filter(s=>document.getElementById('sym-'+s.id)?.checked).map(s=>s.label);
+  state.stress=document.getElementById('stress').value;
+  state.other=document.getElementById('other-symptoms').value;
+  saveLocal();currentPage=3;showPage('page-desc');
+}
+
+// ─── STEP 4: DESCRIPTION ───
+document.addEventListener('DOMContentLoaded',()=>{
+  const dt=document.getElementById('desc-text');
+  if(dt)dt.addEventListener('input',()=>{
+    const l=dt.value.length;
+    document.getElementById('desc-char').textContent=`${l} / 500`;
+    document.getElementById('desc-char-fill').style.width=Math.min(l/500*100,100)+'%';
+    if(l>500)dt.value=dt.value.slice(0,500);
+  });
+});
+function saveDesc(){
+  state.description=document.getElementById('desc-text').value;
+  if(!state.description.trim()){showToast('⚠️ Please describe your symptoms');return}
+  saveLocal();suggestTests();buildCureGuidance();currentPage=4;showPage('page-tests');
+}
+
+// ─── STEP 5A: TESTS ───
+const ALL_TESTS=[
+  {id:'cbc',name:'CBC Test',icon:'🩸',desc:'Complete Blood Count',keys:['fever','fatigue','body pain','cough']},
+  {id:'thyroid',name:'Thyroid Panel',icon:'🦋',desc:'TSH, T3, T4 levels',keys:['fatigue','sleep','weight']},
+  {id:'bp',name:'BP Check',icon:'💓',desc:'Blood Pressure Monitor',keys:['bp','chest','headache']},
+  {id:'sugar',name:'Blood Sugar',icon:'🍭',desc:'Fasting Blood Glucose',keys:['diabetes','fatigue','nausea']},
+  {id:'ecg',name:'ECG',icon:'📈',desc:'Heart Activity',keys:['chest','bp','fatigue']},
+  {id:'xray',name:'X-Ray',icon:'🦴',desc:'Bone & Chest Imaging',keys:['chest','body pain','cough']},
+  {id:'mri',name:'MRI Scan',icon:'🧲',desc:'Detailed Imaging',keys:['headache','body pain','stress']},
+  {id:'urine',name:'Urine Analysis',icon:'💧',desc:'Kidney & UTI check',keys:['fever','fatigue','nausea']},
+  {id:'liver',name:'Liver Panel',icon:'🫀',desc:'Liver function tests',keys:['fatigue','nausea','fever']},
+  {id:'vitamin',name:'Vitamin D & B12',icon:'🌞',desc:'Deficiency check',keys:['fatigue','body pain','sleep']},
+];
+function suggestTests(){
+  const sLower=state.symptoms.map(s=>s.toLowerCase());
+  const desc=state.description.toLowerCase();
+  const matches=ALL_TESTS.filter(t=>t.keys.some(k=>sLower.some(s=>s.includes(k))||desc.includes(k)));
+  state.tests=(matches.length?matches:ALL_TESTS.slice(0,4)).map(t=>t.name);
+  const grid=document.getElementById('test-grid-container');
+  grid.innerHTML=(matches.length?matches:ALL_TESTS.slice(0,4)).map((t,i)=>`
+    <div class="test-card fade-in" style="animation-delay:${i*0.06}s">
+      <span class="test-icon">${t.icon}</span>
+      <div class="test-name">${t.name}</div>
+      <div class="test-desc">${t.desc}</div>
+    </div>`).join('');
+}
+
+// ─── STEP 5B: CURE / GUIDANCE ───
+const CURE_DB={
+  fever:{precautions:['Rest & avoid exertion','Stay away from crowds','Wear lightweight clothing'],diet:['Drink 8-10 glasses of water','Warm soups & broths','Avoid oily & spicy food'],remedies:['Lukewarm sponge bath','Tulsi-ginger tea','Apply wet cloth on forehead']},
+  headache:{precautions:['Rest in a dark, quiet room','Avoid screen time','Apply an ice pack'],diet:['Stay hydrated','Avoid caffeine & alcohol','Eat magnesium-rich foods'],remedies:['Peppermint oil massage','Apply cold/hot compress','Practice deep breathing']},
+  'body aches':{precautions:['Avoid heavy physical work','Keep affected areas warm','Get adequate sleep'],diet:['Anti-inflammatory foods (turmeric, ginger)','High-protein diet','Stay hydrated'],remedies:['Warm compress on sore areas','Epsom salt bath','Light stretching']},
+  fatigue:{precautions:['Prioritise 7-9 hrs of sleep','Avoid excessive caffeine','Manage stress levels'],diet:['Iron & vitamin-rich foods','Nuts, seeds & whole grains','Avoid processed foods'],remedies:['Short power naps (20 min)','Morning sunlight exposure','Ashwagandha tea (consult doctor)']},
+  cough:{precautions:['Avoid cold drinks & ice cream','Cover mouth when coughing','Stay away from dust & smoke'],diet:['Warm fluids & honey water','Ginger & tulsi tea','Avoid dairy products'],remedies:['Steam inhalation with eucalyptus','Honey + black pepper mixture','Gargle with warm salt water']},
+  nausea:{precautions:['Eat small, frequent meals','Avoid strong smells','Sit upright after eating'],diet:['BRAT diet (bananas, rice, applesauce, toast)','Ginger tea or candies','Avoid fatty or greasy food'],remedies:['Sip cold water or ice chips','Peppermint or ginger tea','Acupressure on wrist P6 point']},
+  chest:{precautions:['Avoid strenuous activity immediately','Sit upright, stay calm','Seek emergency care if severe'],diet:['Heart-healthy diet (fish, nuts, vegetables)','Reduce sodium intake','Avoid caffeine & alcohol'],remedies:['Deep breathing exercises','Consult a doctor immediately','Do NOT ignore chest pain']},
+  default:{precautions:['Maintain good hygiene','Get adequate rest & sleep','Consult a doctor for persistent symptoms'],diet:['Balanced diet with fruits & vegetables','Stay well-hydrated','Reduce junk food'],remedies:['Practice stress management','Light exercise like walking','Monitor symptoms with a journal']}
+};
+function buildCureGuidance(){
+  const sLower=state.symptoms.map(s=>s.toLowerCase());
+  let matched=null;
+  for(const key of Object.keys(CURE_DB)){
+    if(key==='default')continue;
+    if(sLower.some(s=>s.includes(key))){matched=CURE_DB[key];break}
+  }
+  const data=matched||CURE_DB.default;
+  const grid=document.getElementById('cure-grid-container');
+  grid.innerHTML=`
+    <div class="cure-card">
+      <div class="cure-card-icon">🛡️</div>
+      <div class="cure-card-title">Precautions</div>
+      <div class="cure-card-content"><ul>${data.precautions.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    </div>
+    <div class="cure-card">
+      <div class="cure-card-icon">🥗</div>
+      <div class="cure-card-title">Diet Suggestions</div>
+      <div class="cure-card-content"><ul>${data.diet.map(d=>`<li>${d}</li>`).join('')}</ul></div>
+    </div>
+    <div class="cure-card" style="grid-column:1/-1">
+      <div class="cure-card-icon">🌿</div>
+      <div class="cure-card-title">Home Remedies (Non-Medical)</div>
+      <div class="cure-card-content"><ul style="columns:2;column-gap:20px">${data.remedies.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    </div>
+  `;
+}
+
+// ─── STEP 6: HOSPITALS ───
+const ALL_HOSPITALS={
+  mumbai:[
+    {name:'Apollo Hospitals Mumbai',rating:4.8,reviews:2340,cost:1200,phone:'+91-22-4234 3434',address:'Apollo Health City, Plot No H, Tardeo Rd, Tardeo, Mumbai, Maharashtra 400034',lat:18.9648,lng:72.8258},
+    {name:'Lilavati Hospital & Research Centre',rating:4.6,reviews:1820,cost:800,phone:'+91-22-2675 1000',address:'A-791, Bandra Reclamation, Bandra West, Mumbai, Maharashtra 400050',lat:19.0547,lng:72.8271},
+    {name:'Kokilaben Dhirubhai Ambani Hospital',rating:4.7,reviews:2100,cost:1500,phone:'+91-22-3066 9999',address:'Rao Saheb Achutrao Patwardhan Marg, Four Bungalows, Andheri West, Mumbai 400053',lat:19.1246,lng:72.8317},
+    {name:'Fortis Hospital Mulund',rating:4.5,reviews:1650,cost:950,phone:'+91-22-6127 0000',address:'Mulund Goregaon Link Rd, Nahur, Mulund West, Mumbai, Maharashtra 400078',lat:19.1714,lng:72.9561},
+    {name:'Hiranandani Hospital Powai',rating:4.4,reviews:1390,cost:700,phone:'+91-22-2576 3300',address:'Dr. Antonio Da Silva Rd, Hiranandani Gardens, Powai, Mumbai 400076',lat:19.1203,lng:72.9077},
+    {name:'Breach Candy Hospital Trust',rating:4.9,reviews:890,cost:2000,phone:'+91-22-2367 2888',address:'60-A, Bhulabhai Desai Rd, Breach Candy, Mumbai 400026',lat:18.9706,lng:72.8074},
+    {name:'P.D. Hinduja National Hospital',rating:4.6,reviews:1750,cost:1100,phone:'+91-22-2444 9199',address:'Veer Savarkar Marg, Mahim, Mumbai, Maharashtra 400016',lat:19.0372,lng:72.8406},
+    {name:'Wockhardt Hospital Mumbai Central',rating:4.3,reviews:1100,cost:900,phone:'+91-22-6178 4444',address:'1877, Dr Anand Rao Nair Marg, Mumbai Central, Mumbai 400011',lat:18.9738,lng:72.8197},
+  ],
+  pune:[
+    {name:'Ruby Hall Clinic',rating:4.7,reviews:2200,cost:1100,phone:'+91-20-6645 5555',address:'40, Sassoon Road, Opposite Railway Station, Pune, Maharashtra 411001',lat:18.5244,lng:73.8669},
+    {name:'Jehangir Hospital',rating:4.6,reviews:1900,cost:1000,phone:'+91-20-6681 5000',address:'32, Sassoon Rd, Sangamvadi, Pune, Maharashtra 411001',lat:18.5196,lng:73.8713},
+    {name:'Deenanath Mangeshkar Hospital',rating:4.8,reviews:2100,cost:900,phone:'+91-20-4015 1000',address:'Erandwane, Near Mhatre Bridge, Pune, Maharashtra 411004',lat:18.5089,lng:73.8268},
+    {name:'Sahyadri Speciality Hospital Deccan',rating:4.5,reviews:1600,cost:850,phone:'+91-20-6721 3000',address:'30-C, Karve Rd, Erandwane, Deccan Gymkhana, Pune 411004',lat:18.5188,lng:73.8394},
+    {name:'Poona Hospital & Research Centre',rating:4.3,reviews:1200,cost:700,phone:'+91-20-2636 1000',address:'27, Sadashiv Peth, Tilak Rd, Pune, Maharashtra 411030',lat:18.5176,lng:73.8568},
+    {name:'Inamdar Multispecialty Hospital',rating:4.4,reviews:1050,cost:800,phone:'+91-20-6622 2222',address:'Fatima Nagar, Wanawadi, Pune, Maharashtra 411040',lat:18.4841,lng:73.8922},
+  ],
+  nagpur:[
+    {name:'KIMS Kingsway Hospital',rating:4.6,reviews:1800,cost:900,phone:'+91-712-660 0600',address:'44, Kingsway, Sadar, Nagpur, Maharashtra 440001',lat:21.1502,lng:79.0872},
+    {name:'Orange City Hospital & Research Institute',rating:4.5,reviews:1500,cost:800,phone:'+91-712-272 7272',address:'30, Kadbi Chowk, Nagpur, Maharashtra 440008',lat:21.1498,lng:79.0786},
+    {name:'Alexis Multispecialty Hospital',rating:4.4,reviews:1200,cost:750,phone:'+91-712-301 1111',address:'Manewada Ring Rd, Bharat Nagar, Nagpur, Maharashtra 440033',lat:21.1261,lng:79.0723},
+    {name:'Care Hospital Nagpur',rating:4.5,reviews:1350,cost:900,phone:'+91-712-710 3000',address:'Plot No 89, NH 7, Wadi, Nagpur, Maharashtra 440023',lat:21.1531,lng:79.0907},
+  ],
+  nashik:[
+    {name:'Wockhardt Hospital Nashik',rating:4.5,reviews:1100,cost:850,phone:'+91-253-660 3222',address:'Pathardi Phata, Mumbai-Agra National Hwy, Nashik, Maharashtra 422010',lat:19.9976,lng:73.7904},
+    {name:'Ratnadeep Hospital',rating:4.4,reviews:900,cost:700,phone:'+91-253-231 6644',address:'Shalimar, College Rd, Nashik, Maharashtra 422005',lat:19.9892,lng:73.7773},
+    {name:'Ashoka Medicover Hospital',rating:4.5,reviews:1000,cost:900,phone:'+91-253-660 7700',address:'Village Makhmalabad, Mumbai-Agra Road, Nashik, Maharashtra 422004',lat:20.0115,lng:73.7847},
+  ],
+  bangalore:[
+    {name:'Manipal Hospital Old Airport Road',rating:4.7,reviews:3200,cost:1300,phone:'+91-80-2502 4444',address:'98, HAL Airport Rd, Kodihalli, Bengaluru, Karnataka 560008',lat:12.9619,lng:77.6446},
+    {name:'Apollo Hospital Bannerghatta Road',rating:4.6,reviews:2800,cost:1200,phone:'+91-80-2630 4050',address:'154/11, Opp. I.I.M, Bannerghatta Main Rd, Bengaluru, Karnataka 560076',lat:12.8989,lng:77.5970},
+    {name:'Narayana Health City Bommasandra',rating:4.8,reviews:3500,cost:1000,phone:'+91-80-7122 2200',address:'258/A, Bommasandra Industrial Area, Anekal Taluk, Bengaluru 560099',lat:12.8273,lng:77.6785},
+    {name:'Fortis Hospital Cunningham Road',rating:4.5,reviews:2400,cost:1100,phone:'+91-80-6621 4444',address:'14, Cunningham Rd, Vasanth Nagar, Bengaluru, Karnataka 560052',lat:12.9869,lng:77.5985},
+    {name:'Sakra World Hospital',rating:4.6,reviews:1900,cost:1400,phone:'+91-80-4969 4969',address:'52/2, 1st Cross Rd, Devarabisanahalli, Marathahalli, Bengaluru 560103',lat:12.9565,lng:77.7017},
+    {name:'Aster CMI Hospital Hebbal',rating:4.7,reviews:2100,cost:1200,phone:'+91-80-4342 0100',address:'43/2, New Airport Rd, NH-44, Sahakara Nagar, Bengaluru, Karnataka 560092',lat:13.0403,lng:77.5972},
+  ],
+  delhi:[
+    {name:'AIIMS New Delhi',rating:4.9,reviews:8500,cost:200,phone:'+91-11-2659 3788',address:'Sri Aurobindo Marg, Ansari Nagar, New Delhi, Delhi 110029',lat:28.5672,lng:77.2100},
+    {name:'Max Super Speciality Hospital Saket',rating:4.7,reviews:4100,cost:1500,phone:'+91-11-2651 5050',address:'1, 2, Press Enclave Marg, Saket, New Delhi, Delhi 110017',lat:28.5244,lng:77.2093},
+    {name:'Apollo Hospital Sarita Vihar',rating:4.6,reviews:3600,cost:1400,phone:'+91-11-2692 5858',address:'Mathura Rd, Jasola, Sarita Vihar, New Delhi 110076',lat:28.5346,lng:77.2948},
+    {name:'Fortis Escorts Heart Institute',rating:4.8,reviews:3000,cost:2000,phone:'+91-11-4713 5000',address:'Okhla Rd, Okhla, New Delhi, Delhi 110025',lat:28.5557,lng:77.2703},
+    {name:'Sir Ganga Ram Hospital',rating:4.7,reviews:3800,cost:1300,phone:'+91-11-2575 0000',address:'Rajinder Nagar, New Delhi, Delhi 110060',lat:28.6380,lng:77.1906},
+    {name:'Safdarjung Hospital',rating:4.4,reviews:5200,cost:100,phone:'+91-11-2616 5060',address:'Sri Aurobindo Marg, Ansari Nagar West, New Delhi 110029',lat:28.5682,lng:77.2010},
+  ],
+  kolkata:[
+    {name:'AMRI Hospitals Salt Lake',rating:4.6,reviews:2400,cost:1000,phone:'+91-33-6680 0000',address:'JC-16, 17, Salt Lake City, Sector III, Kolkata, West Bengal 700098',lat:22.5730,lng:88.4127},
+    {name:'Apollo Gleneagles Hospital Kolkata',rating:4.7,reviews:2800,cost:1300,phone:'+91-33-2320 3040',address:'58, Canal Circular Rd, Kadapara, Phool Bagan, Kankurgachi, Kolkata 700054',lat:22.5461,lng:88.3835},
+    {name:'Medica Superspecialty Hospital',rating:4.5,reviews:1900,cost:950,phone:'+91-33-6652 0000',address:'127, Mukundapur, E M Bypass, Kolkata, West Bengal 700099',lat:22.5008,lng:88.3850},
+    {name:'Fortis Hospital Anandapur',rating:4.5,reviews:1700,cost:1100,phone:'+91-33-6628 4444',address:'730, Anandapur, E M Bypass, Kolkata, West Bengal 700107',lat:22.5093,lng:88.3993},
+  ],
+  hyderabad:[
+    {name:'Apollo Hospital Jubilee Hills',rating:4.8,reviews:4200,cost:1500,phone:'+91-40-2360 7777',address:'Film Nagar, Jubilee Hills, Hyderabad, Telangana 500033',lat:17.4234,lng:78.4074},
+    {name:'Yashoda Hospital Somajiguda',rating:4.6,reviews:3100,cost:1100,phone:'+91-40-4567 4567',address:'Raj Bhavan Rd, Somajiguda, Hyderabad, Telangana 500082',lat:17.4333,lng:78.4553},
+    {name:'Care Hospital Banjara Hills',rating:4.5,reviews:2600,cost:1000,phone:'+91-40-3041 8888',address:'Road No. 1, Banjara Hills, Hyderabad, Telangana 500034',lat:17.4133,lng:78.4480},
+    {name:'KIMS Hospital Secunderabad',rating:4.7,reviews:3500,cost:1200,phone:'+91-40-4488 5000',address:'1-8-31/1, Minister Rd, Secunderabad, Hyderabad 500003',lat:17.4447,lng:78.5041},
+    {name:'AIG Hospitals Gachibowli',rating:4.8,reviews:2900,cost:1300,phone:'+91-40-4244 2222',address:'Survey No 136, Mindspace Rd, Gachibowli, Hyderabad 500032',lat:17.4291,lng:78.3578},
+  ],
+  chennai:[
+    {name:'Apollo Hospital Greams Road',rating:4.8,reviews:5100,cost:1600,phone:'+91-44-2829 0200',address:'21, Greams Lane, Off Greams Rd, Thousand Lights, Chennai 600006',lat:13.0595,lng:80.2490},
+    {name:'Fortis Malar Hospital Adyar',rating:4.6,reviews:2700,cost:1200,phone:'+91-44-4289 2222',address:'52, 1st Main Rd, Gandhi Nagar, Adyar, Chennai, Tamil Nadu 600020',lat:13.0042,lng:80.2545},
+    {name:'MIOT International Hospital',rating:4.7,reviews:3200,cost:1400,phone:'+91-44-4200 2288',address:'4/112, Mount Poonamallee Rd, Manapakkam, Chennai 600089',lat:13.0202,lng:80.1767},
+    {name:'Gleneagles Global Health City',rating:4.6,reviews:2400,cost:1100,phone:'+91-44-4477 7000',address:'439, Cheran Nagar, Perumbakkam, Chennai, Tamil Nadu 600100',lat:12.9194,lng:80.2006},
+    {name:'Sri Ramachandra Institute',rating:4.7,reviews:3800,cost:900,phone:'+91-44-4592 8600',address:'No 1, Ramachandra Nagar, Porur, Chennai, Tamil Nadu 600116',lat:13.0340,lng:80.1558},
+  ],
+  ahmedabad:[
+    {name:'Apollo Hospital Ahmedabad',rating:4.7,reviews:2900,cost:1300,phone:'+91-79-6670 1800',address:'Plot 1A, Bhat GIDC Estate, Gandhinagar, Ahmedabad, Gujarat 382428',lat:23.0880,lng:72.5070},
+    {name:'Zydus Hospital Thaltej',rating:4.8,reviews:3400,cost:1400,phone:'+91-79-6619 0200',address:'Nr. Sola Bridge, S.G. Highway, Thaltej, Ahmedabad, Gujarat 380054',lat:23.0559,lng:72.5063},
+    {name:'Sterling Hospital Gurukul',rating:4.5,reviews:2200,cost:1000,phone:'+91-79-4000 6000',address:'Off Drive-In Rd, Gurukul, Ahmedabad, Gujarat 380052',lat:23.0445,lng:72.5552},
+    {name:'HCG Hospital Mithakhali',rating:4.6,reviews:1800,cost:1200,phone:'+91-79-2685 7000',address:'Commerce Six Rd, Near Mithakhali Cross Roads, Ellisbridge, Ahmedabad 380006',lat:23.0420,lng:72.5651},
+  ],
+  surat:[
+    {name:'Sunshine Global Hospital',rating:4.7,reviews:2100,cost:1100,phone:'+91-261-403 6100',address:'Gajera Rd, Near Kumbhariya, Surat, Gujarat 394210',lat:21.2097,lng:72.8412},
+    {name:'Kiran Hospital Surat',rating:4.6,reviews:1800,cost:900,phone:'+91-261-422 7000',address:'Majura Gate, Ring Road, Surat, Gujarat 395002',lat:21.1944,lng:72.8245},
+    {name:'Nirali Hospital Surat',rating:4.5,reviews:1400,cost:800,phone:'+91-261-273 5555',address:'Near Lalgate, Nanpura, Surat, Gujarat 395001',lat:21.1702,lng:72.8312},
+  ],
+  jaipur:[
+    {name:'Fortis Escorts Hospital Jaipur',rating:4.7,reviews:2600,cost:1200,phone:'+91-141-254 7000',address:'Jawaharlal Nehru Marg, Malviya Nagar, Jaipur, Rajasthan 302017',lat:26.8645,lng:75.8120},
+    {name:'Narayana Multispeciality Hospital Jaipur',rating:4.6,reviews:2100,cost:950,phone:'+91-141-477 3838',address:'Sector 28, Pratap Nagar, Sanganer, Jaipur, Rajasthan 302033',lat:26.7887,lng:75.8521},
+    {name:'Santokba Durlabhji Memorial Hospital',rating:4.5,reviews:1900,cost:900,phone:'+91-141-256 6251',address:'Bhawani Singh Marg, Kanti Nagar, C Scheme, Jaipur 302015',lat:26.8969,lng:75.8237},
+    {name:'Eternal Hospital Jaipur',rating:4.6,reviews:1700,cost:1000,phone:'+91-141-310 0000',address:'46, Jagatpura Rd, Jagatpura, Jaipur, Rajasthan 302017',lat:26.8271,lng:75.8574},
+  ],
+};
+
+const CITY_LABELS={
+  mumbai:'Mumbai',pune:'Pune',nagpur:'Nagpur',nashik:'Nashik',
+  bangalore:'Bangalore',delhi:'Delhi',kolkata:'Kolkata',hyderabad:'Hyderabad',
+  chennai:'Chennai',ahmedabad:'Ahmedabad',surat:'Surat',jaipur:'Jaipur'
+};
+
+const CITY_CENTERS={
+  mumbai:{lat:19.0760,lng:72.8777},
+  pune:{lat:18.5204,lng:73.8567},
+  nagpur:{lat:21.1458,lng:79.0882},
+  nashik:{lat:19.9975,lng:73.7898},
+  bangalore:{lat:12.9716,lng:77.5946},
+  delhi:{lat:28.6139,lng:77.2090},
+  kolkata:{lat:22.5726,lng:88.3639},
+  hyderabad:{lat:17.3850,lng:78.4867},
+  chennai:{lat:13.0827,lng:80.2707},
+  ahmedabad:{lat:23.0225,lng:72.5714},
+  surat:{lat:21.1702,lng:72.8311},
+  jaipur:{lat:26.9124,lng:75.7873}
+};
+
+let currentSortKey='rating';
+let currentHospitals=[];
+
+function haversineDistance(lat1,lng1,lat2,lng2){
+  const R=6371;
+  const dLat=(lat2-lat1)*Math.PI/180;
+  const dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)*Math.sin(dLat/2)+
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+    Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function buildCityTabs(){
+  const el=document.getElementById('city-tabs');
+  const cities=Object.keys(CITY_LABELS);
+  el.innerHTML=`<button class="city-tab ${currentCity==='auto'?'active':''}" onclick="selectCity('auto',this)"><span>📍 Auto-detect</span></button>`
+    +cities.map(c=>`<button class="city-tab ${currentCity===c?'active':''}" onclick="selectCity('${c}',this)"><span>${CITY_LABELS[c]}</span></button>`).join('');
+}
+
+function selectCity(city,btn){
+  currentCity=city;
+  document.querySelectorAll('.city-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(city==='auto'){
+    detectAndShowNearest();
+  } else {
+    document.getElementById('nearest-banner').classList.add('hidden');
+    currentHospitals=[...ALL_HOSPITALS[city]];
+    applySortAndRender();
+  }
+}
+
+function detectAndShowNearest(){
+  if(!navigator.geolocation){
+    showToast('⚠️ Geolocation not supported — showing all cities');
+    fallbackToUserCity();
+    return;
+  }
+  document.getElementById('hospital-list').innerHTML=`<div class="loader-wrap"><div class="loader"></div><div class="loader-text">Detecting your location…</div></div>`;
+  showToast('📍 Detecting your location...',3000);
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+      let nearestCity=null,minDist=Infinity;
+      Object.entries(CITY_CENTERS).forEach(([city,coords])=>{
+        const d=haversineDistance(userLocation.lat,userLocation.lng,coords.lat,coords.lng);
+        if(d<minDist){minDist=d;nearestCity=city;}
+      });
+      currentCity=nearestCity;
+      document.querySelectorAll('.city-tab').forEach(b=>b.classList.remove('active'));
+      let hospitals=[...ALL_HOSPITALS[nearestCity]];
+      if(minDist>80){
+        hospitals=Object.entries(ALL_HOSPITALS).flatMap(([city,hs])=>
+          hs.map(h=>({...h,_city:CITY_LABELS[city]}))
+        );
+      }
+      hospitals=hospitals.map(h=>({
+        ...h,
+        _dist:haversineDistance(userLocation.lat,userLocation.lng,h.lat,h.lng)
+      })).sort((a,b)=>a._dist-b._dist);
+      currentHospitals=hospitals;
+      document.getElementById('nearest-banner').classList.remove('hidden');
+      document.getElementById('nearest-banner').textContent=`📍 Nearest hospitals to you — ${nearestCity?CITY_LABELS[nearestCity]:'your area'} (${Math.round(minDist)} km away)`;
+      renderHospitals();
+      showToast(`✅ Showing nearest hospitals in ${nearestCity?CITY_LABELS[nearestCity]:'your area'}!`);
+    },
+    ()=>{
+      showToast('⚠️ Location access denied — using your profile city');
+      fallbackToUserCity();
+    }
+  );
+}
+
+function fallbackToUserCity(){
+  const cityLower=(state.city||'').toLowerCase();
+  const matched=Object.keys(CITY_LABELS).find(c=>cityLower.includes(c));
+  if(matched){
+    currentCity=matched;
+    currentHospitals=[...ALL_HOSPITALS[matched]];
+  } else {
+    currentHospitals=Object.values(ALL_HOSPITALS).flat();
+  }
+  applySortAndRender();
+}
+
+function applySortAndRender(){
+  if(currentSortKey==='rating') currentHospitals.sort((a,b)=>b.rating-a.rating);
+  else if(currentSortKey==='cost') currentHospitals.sort((a,b)=>a.cost-b.cost);
+  else if(currentSortKey==='reviews') currentHospitals.sort((a,b)=>b.reviews-a.reviews);
+  renderHospitals();
+}
+
+function sortHospitals(key,btn){
+  currentSortKey=key;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applySortAndRender();
+}
+
+function renderHospitals(){
+  const el=document.getElementById('hospital-list');
+  const activeCityLabel=currentCity&&currentCity!=='auto'?CITY_LABELS[currentCity]:null;
+
+  let cityHeading='';
+  if(activeCityLabel){
+    cityHeading=`<div style="
+      display:flex;align-items:center;gap:12px;
+      background:var(--primary-soft);border:1.5px solid var(--primary-border);
+      border-radius:var(--radius-sm);padding:14px 20px;margin-bottom:16px;
+      animation:fadeInUp 0.4s var(--ease-out) both;
+    ">
+      <span style="font-size:24px">📍</span>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.09em">Showing hospitals in</div>
+        <div style="font-size:20px;font-weight:900;color:var(--primary);font-family:'Lora',serif;line-height:1.15">${activeCityLabel}</div>
+      </div>
+      <div style="margin-left:auto;font-size:13px;font-weight:800;color:var(--text3)">${currentHospitals.length} hospitals</div>
+    </div>`;
+  }
+
+  el.innerHTML=cityHeading+currentHospitals.map((h,i)=>{
+    const starCount=Math.round(h.rating);
+    const stars='★'.repeat(starCount)+'☆'.repeat(5-starCount);
+    const searchQuery=encodeURIComponent(h.name+' '+h.address);
+    const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+    const dirUrl=`https://www.google.com/maps/dir/?api=1&destination=${searchQuery}&travelmode=driving`;
+    const costBadge=h.cost<1000?'badge-green':'badge-warn';
+    const distStr=h._dist?`<span>🚗 ${h._dist<1?'<1':Math.round(h._dist)} km away</span>`:'';
+    const cityForCard=h._city||(activeCityLabel?activeCityLabel:null);
+    const cityTag=cityForCard?`<span style="font-size:11px;background:var(--primary-soft);color:var(--primary);border-radius:50px;padding:3px 10px;font-weight:700;margin-left:6px">${cityForCard}</span>`:'';
+    return `<div class="hospital-card fade-in" style="animation-delay:${i*0.04}s">
+      <div class="hosp-top">
+        <div style="flex:1;min-width:0">
+          <div class="hosp-name"><span>${h.name}</span>${cityTag}</div>
+          <div class="stars">${stars} <span style="color:var(--text2);font-size:12px;font-weight:500">${h.rating} · ${h.reviews.toLocaleString()} reviews</span></div>
+        </div>
+        <span class="badge ${costBadge}" style="flex-shrink:0;margin-left:12px">₹${h.cost}</span>
+      </div>
+      <div class="hosp-meta">
+        <span>📞 ${h.phone}</span>
+        <span style="grid-column:1/-1">📍 ${h.address}</span>
+        ${distStr}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center">
+        <a class="btn-map" href="${mapsUrl}" target="_blank" rel="noopener">🗺 View on Maps</a>
+        <a class="btn-map" href="${dirUrl}" target="_blank" rel="noopener" style="background:var(--primary-soft);border-color:var(--primary-border);color:var(--primary)">🧭 Get Directions</a>
+        <button onclick="openAppointment('${h.name.replace(/'/g,"&apos;")}')"
+          style="
+            background:linear-gradient(135deg,#0058c0,#007a65);
+            color:#fff;border:none;border-radius:50px;
+            padding:9px 18px;font-size:12px;font-weight:800;
+            font-family:'Inter',sans-serif;cursor:pointer;
+            box-shadow:0 4px 14px rgba(0,88,192,0.36);
+            transition:all 0.28s cubic-bezier(0.34,1.56,0.64,1);
+            display:inline-flex;align-items:center;gap:6px;
+          "
+          onmouseover="this.style.transform='translateY(-2px) scale(1.05)';this.style.boxShadow='0 8px 22px rgba(0,88,192,0.50)';"
+          onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(0,88,192,0.36)';"
+        >📅 Book Appointment</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function initHospitalPage(){
+  buildCityTabs();
+  detectAndShowNearest();
+}
+
+// ─── APPOINTMENT MODAL ───
+function openAppointment(hospitalName){
+  document.getElementById('appt-name').value=state.name||'';
+  document.getElementById('appt-phone').value=state.phone||'';
+  document.getElementById('appt-dept').value='';
+  document.getElementById('appt-notes').value='';
+  document.getElementById('appt-err').style.display='none';
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('appt-date').min=today;
+  document.getElementById('appt-date').value='';
+  document.getElementById('appt-time').value='';
+  document.getElementById('appt-hospital-name').textContent='🏥 '+hospitalName;
+  document.getElementById('appt-hospital-name').dataset.hospital=hospitalName;
+  document.getElementById('appt-form-wrap').style.display='';
+  document.getElementById('appt-success').style.display='none';
+  const overlay=document.getElementById('appt-overlay');
+  overlay.style.display='flex';
+  document.body.style.overflow='hidden';
+  const modal=document.getElementById('appt-modal');
+  modal.style.animation='none';
+  requestAnimationFrame(()=>{
+    modal.style.animation='';
+    modal.style.animation='modalPop 0.42s cubic-bezier(0.34,1.56,0.64,1) both';
+  });
+}
+
+function closeAppointment(){
+  const overlay=document.getElementById('appt-overlay');
+  const modal=document.getElementById('appt-modal');
+  modal.style.animation='modalDrop 0.28s cubic-bezier(0.4,0,1,1) both';
+  setTimeout(()=>{
+    overlay.style.display='none';
+    document.body.style.overflow='';
+    modal.style.animation='';
+  },260);
+}
+
+function bookAppointment(){
+  const name=document.getElementById('appt-name').value.trim();
+  const dept=document.getElementById('appt-dept').value;
+  const date=document.getElementById('appt-date').value;
+  const time=document.getElementById('appt-time').value;
+  const phone=document.getElementById('appt-phone').value.trim();
+  const hospital=document.getElementById('appt-hospital-name').dataset.hospital;
+
+  const errEl=document.getElementById('appt-err');
+  const errMsg=document.getElementById('appt-err-msg');
+  errEl.style.display='none';
+
+  if(!name){errMsg.textContent='Please enter patient name';errEl.style.display='flex';return}
+  if(!dept){errMsg.textContent='Please select a department';errEl.style.display='flex';return}
+  if(!date){errMsg.textContent='Please select a preferred date';errEl.style.display='flex';return}
+  if(!time){errMsg.textContent='Please select a preferred time';errEl.style.display='flex';return}
+  if(!phone){errMsg.textContent='Please enter a contact number';errEl.style.display='flex';return}
+
+  const dateObj=new Date(date);
+  const niceDate=dateObj.toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+
+  const appts=JSON.parse(localStorage.getItem('hc_appointments')||'[]');
+  const ref='MC'+Date.now().toString().slice(-6);
+  appts.unshift({
+    ref,hospital,name,dept,date,time,phone,
+    notes:document.getElementById('appt-notes').value,
+    bookedAt:new Date().toLocaleString('en-IN')
+  });
+  localStorage.setItem('hc_appointments',JSON.stringify(appts));
+
+  document.getElementById('appt-form-wrap').style.display='none';
+  document.getElementById('appt-confirm-text').innerHTML=
+    `Your appointment request at <strong>${hospital}</strong> has been submitted. The hospital will contact you at <strong>${phone}</strong> to confirm.`;
+  document.getElementById('appt-summary-box').innerHTML=`
+    <div style="display:grid;gap:6px">
+      <div>🏥 <strong>${hospital}</strong></div>
+      <div>👤 ${name}</div>
+      <div>🩺 ${dept}</div>
+      <div>📆 ${niceDate}</div>
+      <div>🕐 ${time}</div>
+      <div>📞 ${phone}</div>
+      <div style="margin-top:4px;padding-top:8px;border-top:1px solid var(--primary-border);font-size:11px;color:var(--text3)">
+        Reference ID: <strong style="color:var(--primary)">${ref}</strong>
+      </div>
+    </div>
+  `;
+  document.getElementById('appt-success').style.display='';
+  showToast('✅ Appointment booked! Ref: '+ref,4000);
+}
+
+document.getElementById('appt-overlay').addEventListener('click',function(e){
+  if(e.target===this)closeAppointment();
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&document.getElementById('appt-overlay').style.display!=='none')closeAppointment();
+});
+
+// ─── STEP 7: REVIEW ───
+const RATING_LABELS=['','😞 Poor','😕 Fair','😐 Okay','😊 Good','🤩 Excellent!'];
+function rate(n){
+  userRating=n;state.rating=n;
+  document.querySelectorAll('.star-btn').forEach((b,i)=>{
+    b.textContent=i<n?'★':'☆';
+    b.classList.toggle('lit',i<n);
+  });
+  document.getElementById('rating-label').textContent=RATING_LABELS[n]||'';
+}
+function submitReview(){
+  if(!userRating){showToast('⚠️ Please rate your experience');return}
+  state.feedback=document.getElementById('feedback-text').value;
+  saveLocal();showToast('🎉 Thank you for your feedback!');
+  currentPage=7;showPage('page-done');
+}
+
+// ─── DOWNLOAD REPORT (PDF) ───
+function downloadReport(){
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pageW=210, margin=20, contentW=pageW-margin*2;
+    let y=margin;
+
+    doc.setFillColor(0,102,204);
+    doc.rect(0,0,pageW,42,'F');
+    doc.setFillColor(0,137,123);
+    doc.rect(pageW/2,0,pageW/2,42,'F');
+    doc.setFillColor(0,80,170);
+    doc.rect(pageW/3,0,pageW/3,42,'F');
+
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(24);
+    doc.text('MediCheck',margin,22);
+    doc.setFontSize(11);
+    doc.setFont('helvetica','normal');
+    doc.text('Smart Health Assistant — Health Report',margin,31);
+    doc.setFontSize(9);
+    doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`,pageW-margin,31,{align:'right'});
+
+    y=54;
+    const sections=[
+      {title:'PERSONAL INFORMATION',rows:[
+        ['Full Name',state.name||'—'],
+        ['Age',state.age?`${state.age} years`:'—'],
+        ['Gender',state.gender||'—'],
+        ['Phone',state.phone||'—'],
+        ['City',state.city||'—'],
+        ['Email',state.email||'—'],
+      ]},
+    ];
+    sections.forEach(sec=>{
+      doc.setFillColor(240,247,255);
+      doc.roundedRect(margin,y,contentW,7,2,2,'F');
+      doc.setTextColor(0,102,204);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(11);
+      doc.text(sec.title,margin+4,y+5);
+      y+=13;
+      doc.setFontSize(10);
+      sec.rows.forEach(([k,v])=>{
+        doc.setFont('helvetica','bold');doc.setTextColor(58,95,125);
+        doc.text(k+':',margin,y);
+        doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+        doc.text(String(v),margin+45,y);
+        y+=7;
+      });
+      y+=4;
+    });
+
+    // Symptoms
+    doc.setFillColor(240,247,255);
+    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.setTextColor(0,102,204);doc.setFont('helvetica','bold');doc.setFontSize(11);
+    doc.text('SYMPTOMS & HEALTH DATA',margin+4,y+5);
+    y+=13;
+    doc.setFontSize(10);
+    doc.setFont('helvetica','bold');doc.setTextColor(58,95,125);
+    doc.text('Reported Symptoms:',margin,y);
+    doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+    const sympStr=state.symptoms.length?state.symptoms.join(', '):'None selected';
+    const sympLines=doc.splitTextToSize(sympStr,contentW-45);
+    doc.text(sympLines,margin+45,y);y+=7*sympLines.length;
+    doc.setFont('helvetica','bold');doc.setTextColor(58,95,125);
+    doc.text('Stress Level:',margin,y);
+    doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+    doc.text(`${state.stress}/10`,margin+45,y);y+=7;
+
+    y+=4;
+    // Description
+    doc.setFillColor(240,247,255);
+    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.setTextColor(0,102,204);doc.setFont('helvetica','bold');doc.setFontSize(11);
+    doc.text('SYMPTOM DESCRIPTION',margin+4,y+5);y+=13;
+    doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+    const descLines=doc.splitTextToSize(state.description||'No description provided.',contentW);
+    doc.text(descLines,margin,y);y+=7*descLines.length+4;
+
+    // Tests
+    doc.setFillColor(240,247,255);
+    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.setTextColor(0,102,204);doc.setFont('helvetica','bold');doc.setFontSize(11);
+    doc.text('RECOMMENDED TESTS',margin+4,y+5);y+=13;
+    doc.setFontSize(10);
+    if(state.tests&&state.tests.length){
+      state.tests.forEach((t,i)=>{
+        doc.setFillColor(232,244,255);
+        doc.roundedRect(margin,y-4,contentW,8,2,2,'F');
+        doc.setFont('helvetica','bold');doc.setTextColor(0,102,204);
+        doc.text(`${i+1}.`,margin+2,y+1);
+        doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+        doc.text(t,margin+10,y+1);y+=10;
+      });
+    } else {
+      doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+      doc.text('No tests suggested.',margin,y);y+=10;
+    }
+
+    y+=4;
+    if(y>260){doc.addPage();y=margin;}
+    doc.setFillColor(240,247,255);
+    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.setTextColor(0,102,204);doc.setFont('helvetica','bold');doc.setFontSize(11);
+    doc.text('USER FEEDBACK',margin+4,y+5);y+=13;
+    doc.setFontSize(10);
+    doc.setFont('helvetica','bold');doc.setTextColor(58,95,125);
+    doc.text('Rating:',margin,y);
+    doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+    doc.text(`${state.rating}/5 ${'★'.repeat(state.rating)}`,margin+30,y);y+=7;
+    if(state.feedback){
+      doc.setFont('helvetica','bold');doc.setTextColor(58,95,125);
+      doc.text('Feedback:',margin,y);
+      doc.setFont('helvetica','normal');doc.setTextColor(13,33,55);
+      const fbLines=doc.splitTextToSize(state.feedback,contentW-30);
+      doc.text(fbLines,margin+30,y);y+=7*fbLines.length;
+    }
+
+    const footerY=285;
+    doc.setFillColor(212,107,8);doc.rect(0,footerY-2,pageW,14,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','italic');doc.setFontSize(8);
+    doc.text('⚠ DISCLAIMER: This report is AI-assisted and does not constitute medical advice. Always consult a registered physician.',pageW/2,footerY+4,{align:'center'});
+    doc.setFontSize(7);
+    doc.text('MediCheck Smart Health Assistant · Health Report · Confidential',pageW/2,footerY+9,{align:'center'});
+
+    doc.save('medicheck_health_report.pdf');
+    showToast('📥 PDF Report downloaded!');
+  }catch(err){
+    console.error(err);
+    const lines=[
+      '=== MediCheck Smart Health Report ===',
+      `Name: ${state.name}`,`Age: ${state.age}`,`Gender: ${state.gender}`,
+      `Phone: ${state.phone}`,`City: ${state.city}`,`Email: ${state.email}`,
+      '',`Symptoms: ${state.symptoms.join(', ')||'None'}`,
+      `Stress Level: ${state.stress}/10`,`Other: ${state.other||'—'}`,
+      '',`Description: ${state.description}`,
+      '',`Suggested Tests: ${state.tests.join(', ')}`,
+      '',`Rating: ${state.rating}/5`,`Feedback: ${state.feedback||'—'}`,
+      '',`Generated: ${new Date().toLocaleString()}`,
+    ];
+    const blob=new Blob([lines.join('\n')],{type:'text/plain'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='medicheck_report.txt';a.click();
+    showToast('📥 Report downloaded (text)!');
+  }
+}
+
+// ─── RESTART ───
+function restart(){
+  localStorage.removeItem('hc_state');localStorage.removeItem('hc_page');
+  state={email:'',name:'',age:'',gender:'',phone:'',city:'',symptoms:[],stress:3,other:'',description:'',tests:[],rating:0,feedback:''};
+  currentPage=0;showPage('page-login');
+}
+
+// ─── INIT ───
+renderSidebar();
+document.getElementById('p-email').value=state.email||'';
+const dt=document.getElementById('desc-text');
+if(dt){dt.addEventListener('input',()=>{const l=dt.value.length;document.getElementById('desc-char').textContent=`${Math.min(l,500)} / 500`;document.getElementById('desc-char-fill').style.width=Math.min(l/500*100,100)+'%';if(l>500)dt.value=dt.value.slice(0,500);})}
+loadLocal();
+setTimeout(()=>saveLocal(),5000);
+setInterval(()=>{
+  if(currentPage>0){
+    state.description=document.getElementById('desc-text')?.value||state.description;
+    state.other=document.getElementById('other-symptoms')?.value||state.other;
+    saveLocal();
+  }
+},10000);
+updateStress(3);
+</script>
+</body>
+</html>
