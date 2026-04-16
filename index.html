@@ -160,28 +160,9 @@
               <span class="field-icon">🔑</span>
               <input type="password" id="login-pass" placeholder="Min. 6 characters" class="has-icon"/>
             </div>
-            <div id="confirm-section" class="hidden">
-              <label>Confirm Password</label>
-              <div class="field-group">
-                <span class="field-icon">🔐</span>
-                <input type="password" id="login-pass2" placeholder="Re-enter your password" class="has-icon"/>
-              </div>
-            </div>
           </div>
 
-          <div id="otp-section" class="hidden">
-            <label>Email OTP Verification</label>
-            <div class="input-row">
-              <div class="field">
-                <div class="field-group">
-                  <span class="field-icon">🔢</span>
-                  <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6" class="has-icon"/>
-                </div>
-              </div>
-              <button class="btn-otp" onclick="sendOTP()" id="send-otp-btn">Send OTP</button>
-            </div>
-            <div id="otp-msg" class="otp-info hidden"></div>
-          </div>
+          
 
           <div class="action-row">
             <button class="btn btn-primary" onclick="handleLogin()" id="auth-submit-btn">
